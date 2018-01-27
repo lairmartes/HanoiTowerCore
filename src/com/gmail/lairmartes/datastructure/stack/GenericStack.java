@@ -8,7 +8,8 @@ package com.gmail.lairmartes.datastructure.stack;
  */
 public interface GenericStack<T, E> {
 	/** Removes the last element that have been put on the list and return this element to the caller.
-	 * @return the element on the top of the list
+     *
+	 * @return the element on the top of the list or null element if the stack is empty.
 	 */
 	T pop();
 
@@ -35,6 +36,7 @@ public interface GenericStack<T, E> {
 	T top();
 
     /** Returns an array containing all elements included in the stack.
+     * It's recommended return a clone of the array to avoid expose stack data.
      *
      * @return an array with the elements included in the stack.
      */
