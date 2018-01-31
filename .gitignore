@@ -1,7 +1,19 @@
-/** ignoring build files
+# ignoring build files
 out/
-/** ignoring idea folders
+
+# ignoring Intellij folders and files
 .idea/
-/** ignoring idea configuration files
 *.iml
+
+# ignoring vscode folders and files
+*.code-workspace
+settings.json
+
+# ignoring gradle files (except gradle build and settings that describe how to build this component)
+.gradle/
+build/
+gradle/
+# ignoring gradle shell script/windows batch files
+gradlew 
+gradlew.bat
 
