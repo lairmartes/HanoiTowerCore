@@ -14,6 +14,7 @@ import static com.gmail.lairmartes.game.hanoitower.HanoiTowerControl.PinPosition
 import static com.gmail.lairmartes.game.hanoitower.HanoiTowerControl.PinPosition.SECOND;
 import static com.gmail.lairmartes.game.hanoitower.HanoiTowerControl.PinPosition.THIRD;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -39,7 +40,7 @@ class HanoiTowerControlTest {
         public void hanoiTowerEvent(GameOverEvent event) {
             _gameOverEventDetected = true;
 
-            setFinalGameScore(event.getScore());
+            _finalGameScore = event.getScore();
         }
 
         @Override
@@ -77,7 +78,18 @@ class HanoiTowerControlTest {
             playPerfectGameWithThreeDisks();
             assertEquals(1d, this._finalGameScore, "This should be a flawless victory.");
         } catch (InvalidMoveException e) {
-            fail("Unexpected error" + e);
+            fail("Unexpected error: " + e);
+        }
+    }
+
+    @Test
+    @DisplayName("Play with more moves than necessary - not a flawless victory")
+    public void verifyFlawVictory() {
+        try {
+            playNotPerfectGameWithThreeDisks();
+            assertNotEquals(1d, _finalGameScore, "This is NOT a flawless victory.");
+        } catch (InvalidMoveException e) {
+            fail("Unexpected error: " + e);
         }
     }
 
@@ -103,21 +115,6 @@ class HanoiTowerControlTest {
         }
     }
 
-    private void playPerfectGameWithThreeDisks() throws InvalidMoveException {
-        _matchTest.startGame(3);
-        move(FIRST, THIRD);
-        move(FIRST, SECOND);
-        move(THIRD, SECOND);
-        move(FIRST, THIRD);
-        move(SECOND, FIRST);
-        move(SECOND, THIRD);
-        move(FIRST, THIRD);
-    }
-
-    void setFinalGameScore(double score) {
-        this._finalGameScore = score;
-    }
-
     @Test
     @DisplayName("Check if controller detects an invalid move")
     void makeInvalidMoveAndCheckIfItIsInvalid() {
@@ -137,6 +134,32 @@ class HanoiTowerControlTest {
         } catch (InvalidMoveException e) {
             fail("A invalid move has been detected incorrectly: " + e.getMessage());
         }
+    }
+
+    private void playPerfectGameWithThreeDisks() throws InvalidMoveException {
+        _matchTest.startGame(3);
+        move(FIRST, THIRD);
+        move(FIRST, SECOND);
+        move(THIRD, SECOND);
+        move(FIRST, THIRD);
+        move(SECOND, FIRST);
+        move(SECOND, THIRD);
+        move(FIRST, THIRD);
+    }
+
+    private void playNotPerfectGameWithThreeDisks() throws InvalidMoveException {
+        _matchTest.startGame(3);
+        move(FIRST, SECOND);
+        move(FIRST, THIRD);
+        move(SECOND, THIRD);
+        move(FIRST, SECOND);
+        move(THIRD, SECOND);
+        move(THIRD, FIRST);
+        move(SECOND, FIRST);
+        move(SECOND, THIRD);
+        move(FIRST, SECOND);
+        move(FIRST, THIRD);
+        move(SECOND, THIRD);
     }
 
     private void move(HanoiTowerControl.PinPosition from, HanoiTowerControl.PinPosition to) throws InvalidMoveException {
