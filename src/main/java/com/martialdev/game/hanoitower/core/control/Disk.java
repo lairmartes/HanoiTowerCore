@@ -16,8 +16,8 @@ public class Disk implements Comparable<Disk>{
 	/** DISK_ZERO is the Null Disk object that is used to avoid NullPointerException.
 	 */
 	public final static Disk DISK_ZERO = new Disk(0);
-	private int _size;
-	private String _toString;
+	private final int _size;
+	private final String _toString;
 
 	/**
 	 * A Disk element must be constructed with a size.

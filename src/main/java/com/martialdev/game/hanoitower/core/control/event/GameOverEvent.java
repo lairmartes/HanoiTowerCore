@@ -2,15 +2,11 @@ package com.martialdev.game.hanoitower.core.control.event;
 
 public class GameOverEvent {
 
-    private int _moveQuantity;
-    private double _score;
+    public final double score;
+    public final int totalMoves;
 
-    public GameOverEvent(int moves, double score) {
-        this._moveQuantity = moves;
-        this._score = score;
-    }
-
-    public double getScore() {
-        return this._score;
+    public GameOverEvent(int totalMoves, double score) {
+        this.totalMoves = totalMoves;
+        this.score = score;
     }
 }

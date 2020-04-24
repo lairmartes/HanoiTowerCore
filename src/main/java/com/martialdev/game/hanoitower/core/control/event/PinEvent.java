@@ -6,15 +6,15 @@ import static com.martialdev.game.hanoitower.core.control.HanoiTowerControl.PinP
 
 public class PinEvent {
 
-    private Disk _diskMoved;
-    private PinPosition _pinPosition;
-    private Pin _targetPin;
-    private int _currentMoves;
+    public final Disk diskMoved;
+    public final PinPosition pinPosition;
+    public final Pin targetPin;
+    public final int currentMoves;
 
     public PinEvent(Disk diskMoved, PinPosition position, Pin targetPin, int currentMoves) {
-        this._diskMoved = diskMoved;
-        this._pinPosition = position;
-        this._targetPin = targetPin;
-        this._currentMoves = currentMoves;
+        this.diskMoved = diskMoved;
+        this.pinPosition = position;
+        this.targetPin = targetPin;
+        this.currentMoves = currentMoves;
     }
 }

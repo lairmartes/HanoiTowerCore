@@ -1,74 +1,67 @@
 package com.martialdev.game.hanoitower.core.control;
 
-import com.martialdev.game.hanoitower.core.control.event.PinEvent;
 import com.martialdev.game.hanoitower.core.control.event.GameOverEvent;
 import com.martialdev.game.hanoitower.core.control.event.GameStartEvent;
 import com.martialdev.game.hanoitower.core.control.event.HanoiTowerListener;
+import com.martialdev.game.hanoitower.core.control.event.PinEvent;
 import com.martialdev.game.hanoitower.core.control.exception.InvalidMoveException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.api.Test;
 
 import static com.martialdev.game.hanoitower.core.control.HanoiTowerControl.PinPosition.FIRST;
 import static com.martialdev.game.hanoitower.core.control.HanoiTowerControl.PinPosition.SECOND;
 import static com.martialdev.game.hanoitower.core.control.HanoiTowerControl.PinPosition.THIRD;
-
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class HanoiTowerControlTest {
 
     private HanoiTowerControl _matchTest;
-    private int _disksAdded;
-    private int _disksRemoved;
-    private boolean _gameOverEventDetected;
-    private boolean _gameStartEventDetected;
-    private double _finalGameScore;
+    private GameOverEvent _gameOverEvent;
+    private GameStartEvent _gameStartEvent;
+    private PinEvent _pinEventAdded;
+    private PinEvent _pinEventRemoved;
 
     private final HanoiTowerListener _listener = new HanoiTowerListener() {
 
         @Override
         public void fireDiskAdded(PinEvent event) {
-            _disksAdded++;
+            _pinEventAdded = event;
         }
 
         @Override
         public void hanoiTowerEvent(GameOverEvent event) {
-            _gameOverEventDetected = true;
-
-            _finalGameScore = event.getScore();
+            _gameOverEvent = event;
         }
 
         @Override
         public void fireDiskRemoved(PinEvent event) {
-            _disksRemoved++;
+            _pinEventRemoved = event;
         }
 
         @Override
         public void hanoiTowerEvent(GameStartEvent event) {
-            _gameStartEventDetected = true;
+            _gameStartEvent = event;
         }
     };
 
     @BeforeEach
     public void setupTest() {
-        _disksAdded = 0;
-        _disksRemoved = 0;
-        _gameOverEventDetected = false;
-        _gameStartEventDetected = false;
         _matchTest = new HanoiTowerControl();
         _matchTest.addListener(_listener);
+        _gameOverEvent = new GameOverEvent(0, 0);
+        _gameStartEvent = new GameStartEvent(0);
     }
 
     @Test
     @DisplayName("An 'game started' event must be broadcast when game start")
     public void checkStartGameEventBroadcast() {
-        _matchTest.startGame(3);
-        assertTrue(_gameStartEventDetected, "A game start event should be broadcast.");
+        _matchTest.startGame(5);
+        assertEquals(5, _gameStartEvent.capacity);
     }
 
     @Test
@@ -76,7 +69,7 @@ class HanoiTowerControlTest {
     public void verifyFlawlessVictory() {
         try {
             playPerfectGameWithThreeDisks();
-            assertEquals(1d, this._finalGameScore, "This should be a flawless victory.");
+            assertEquals(1d, _gameOverEvent.score, "This should be a flawless victory.");
         } catch (InvalidMoveException e) {
             fail("Unexpected error: " + e);
         }
@@ -87,18 +80,33 @@ class HanoiTowerControlTest {
     public void verifyFlawVictory() {
         try {
             playNotPerfectGameWithThreeDisks();
-            assertNotEquals(1d, _finalGameScore, "This is NOT a flawless victory.");
+            assertNotEquals(1d, _gameOverEvent.score, "This is NOT a flawless victory.");
         } catch (InvalidMoveException e) {
             fail("Unexpected error: " + e);
         }
     }
 
     @Test
-    @DisplayName("Flawless Victory - number of disks removed and added must be the same")
+    @DisplayName("Check movement counting")
+    public void verifyHowManyMovementHaveBeenDone() {
+        try {
+            playNotPerfectGameWithThreeDisks();
+            assertEquals(11, _gameOverEvent.totalMoves);
+        } catch (InvalidMoveException e) {
+            fail("Unexpected error: " + e);
+        }
+    }
+
+    @Test
+    @DisplayName("Check pin event source and destiny")
     public void verifyIfRemovedAndAddedDisksAreEquals() {
         try {
-            playPerfectGameWithThreeDisks();
-            assertEquals(_disksRemoved, _disksAdded);
+            _matchTest.startGame(3);
+            _matchTest.move(FIRST, SECOND);
+            PinEvent removedExpected = new PinEvent(new Disk(1), FIRST, new Pin(3), 0);
+            PinEvent addedExpected = new PinEvent(new Disk(1), SECOND, new Pin(3), 1);
+            assertTrue(comparePinEvents(_pinEventRemoved, removedExpected));
+            assertTrue(comparePinEvents(_pinEventAdded, addedExpected));
         } catch (InvalidMoveException e) {
             fail("Unexpected error" + e);
         }
@@ -109,7 +117,7 @@ class HanoiTowerControlTest {
     public void checkGameOverNotification() {
         try {
             playPerfectGameWithThreeDisks();
-            assertTrue(_gameOverEventDetected);
+            assertEquals(1d, _gameOverEvent.score);
         } catch (InvalidMoveException e) {
             fail("Unexpected error" + e);
         }
@@ -123,48 +131,50 @@ class HanoiTowerControlTest {
         _matchTest.startGame(5);
 
         try {
-            _matchTest.selectFromPin(FIRST);
-            _matchTest.moveSelectedToPin(SECOND);
+            _matchTest.move(FIRST, SECOND);
 
-            _matchTest.selectFromPin(FIRST);
-            Executable executeInvalidDiskMove = () -> _matchTest.moveSelectedToPin(SECOND);
-
-            assertThrows(InvalidMoveException.class, executeInvalidDiskMove,
+            assertThrows(InvalidMoveException.class, () -> _matchTest.move(FIRST, SECOND),
                     "An exception should be thrown when trying to put a greater disk above a lesser.");
         } catch (InvalidMoveException e) {
             fail("A invalid move has been detected incorrectly: " + e.getMessage());
         }
     }
 
+    @Test
+    @DisplayName("Check how many movements have been done")
+
     private void playPerfectGameWithThreeDisks() throws InvalidMoveException {
         _matchTest.startGame(3);
-        move(FIRST, THIRD);
-        move(FIRST, SECOND);
-        move(THIRD, SECOND);
-        move(FIRST, THIRD);
-        move(SECOND, FIRST);
-        move(SECOND, THIRD);
-        move(FIRST, THIRD);
+        _matchTest.move(FIRST, THIRD);
+        _matchTest.move(FIRST, SECOND);
+        _matchTest.move(THIRD, SECOND);
+        _matchTest.move(FIRST, THIRD);
+        _matchTest.move(SECOND, FIRST);
+        _matchTest.move(SECOND, THIRD);
+        _matchTest.move(FIRST, THIRD);
     }
 
     private void playNotPerfectGameWithThreeDisks() throws InvalidMoveException {
         _matchTest.startGame(3);
-        move(FIRST, SECOND);
-        move(FIRST, THIRD);
-        move(SECOND, THIRD);
-        move(FIRST, SECOND);
-        move(THIRD, SECOND);
-        move(THIRD, FIRST);
-        move(SECOND, FIRST);
-        move(SECOND, THIRD);
-        move(FIRST, SECOND);
-        move(FIRST, THIRD);
-        move(SECOND, THIRD);
+        _matchTest.move(FIRST, SECOND);
+        _matchTest.move(FIRST, THIRD);
+        _matchTest.move(SECOND, THIRD);
+        _matchTest.move(FIRST, SECOND);
+        _matchTest.move(THIRD, SECOND);
+        _matchTest.move(THIRD, FIRST);
+        _matchTest.move(SECOND, FIRST);
+        _matchTest.move(SECOND, THIRD);
+        _matchTest.move(FIRST, SECOND);
+        _matchTest.move(FIRST, THIRD);
+        _matchTest.move(SECOND, THIRD);
     }
 
-    private void move(HanoiTowerControl.PinPosition from, HanoiTowerControl.PinPosition to) throws InvalidMoveException {
-        _matchTest.selectFromPin(from);
-        _matchTest.moveSelectedToPin(to);
+    private boolean comparePinEvents(PinEvent pinEvent1, PinEvent pinEvent2) {
+        return (
+                pinEvent1.diskMoved.equals(pinEvent2.diskMoved) &&
+                pinEvent1.pinPosition.equals(pinEvent2.pinPosition) &&
+                pinEvent1.currentMoves == pinEvent2.currentMoves
+        );
     }
 }
 

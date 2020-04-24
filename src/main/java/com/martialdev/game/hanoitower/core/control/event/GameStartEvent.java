@@ -2,9 +2,9 @@ package com.martialdev.game.hanoitower.core.control.event;
 
 public class GameStartEvent {
 
-    private int _definedPinCapacity;
+    public final int capacity;
 
-    public GameStartEvent(int pinCapacity) {
-        this._definedPinCapacity = pinCapacity;
+    public GameStartEvent(int capacity) {
+        this.capacity = capacity;
     }
 }

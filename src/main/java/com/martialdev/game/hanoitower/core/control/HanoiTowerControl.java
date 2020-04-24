@@ -22,13 +22,13 @@ public class HanoiTowerControl {
 
     private int _movesDone;
     private static final int PINS_AVAILABLE = 3;
-    private Pin[] _gamePins;
+    private final Pin[] _gamePins;
     private Disk _currentDisk;
     private int _pinCapacity;
     private Disk[] _disksInTheGame;
     private double _score;
     private int _minimumMovesRequired;
-    private List<HanoiTowerListener> _hanoiTowerListener;
+    private final List<HanoiTowerListener> _hanoiTowerListener;
 
     /** Enumeration of pins indicating it's position.
      */
@@ -108,25 +108,20 @@ public class HanoiTowerControl {
      * <b>Info</b>: Broadcasts disk removed event.
      *
      * @param pinPosition FIRST, SECOND or THIRD.
-     * @return the disk removed.
-     * @throws InvalidMoveException
      */
-    public Disk selectFromPin(PinPosition pinPosition) throws InvalidMoveException {
+    private void selectFromPin(PinPosition pinPosition) throws InvalidMoveException {
         Pin pinSelected = _gamePins[pinPosition.ordinal()];
         _currentDisk = pinSelected.removeDisk();
 
         fireDiskRemoved(new PinEvent(this._currentDisk, pinPosition, pinSelected, this._movesDone));
-
-        return _currentDisk;
     }
 
     /** Include the given disk in the pin located in the given pin position.
      * <b>Info</b>: Broadcasts disk added event and game over event (when game is over, of course).
      *
      * @param pinPosition FIRST, SECOND or THIRD.
-     * @throws InvalidMoveException
      */
-    public void moveSelectedToPin(PinPosition pinPosition) throws InvalidMoveException {
+    private void moveSelectedToPin(PinPosition pinPosition) throws InvalidMoveException {
         Pin pinSelected = _gamePins[pinPosition.ordinal()];
         pinSelected.add(_currentDisk);
         _movesDone++;
@@ -141,6 +136,11 @@ public class HanoiTowerControl {
         if (isGameOver()) {
             broadCastEvent(new GameOverEvent(this._movesDone, this._score));
         }
+    }
+
+    public void move(final PinPosition from, final PinPosition to) throws InvalidMoveException {
+        selectFromPin(from);
+        moveSelectedToPin(to);
     }
 
     // test if the game is over
