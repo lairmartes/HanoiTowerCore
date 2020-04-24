@@ -17,21 +17,4 @@ public class PinEvent {
         this._targetPin = targetPin;
         this._currentMoves = currentMoves;
     }
-
-    public Disk getDiskMoved() {
-        return this._diskMoved;
-    }
-
-    public PinPosition getPinPosition() {
-        return this._pinPosition;
-    }
-
-    public Pin getTargetPin() {
-        return this._targetPin;
-    }
-
-    public int getCurrentMoves() {
-        return this._currentMoves;
-    }
-
 }

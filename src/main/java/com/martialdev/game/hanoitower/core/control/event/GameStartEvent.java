@@ -6,7 +6,6 @@ public class GameStartEvent {
 
     public GameStartEvent(int pinCapacity) {
         this._definedPinCapacity = pinCapacity;
-
     }
 
 }
