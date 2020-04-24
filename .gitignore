@@ -1,0 +1,18 @@
+# ignoring build folders
+target/
+
+# ignoring Intellij folders and files
+.idea/
+*.iml
+
+# ignoring git files
+.gitattributes
+
+# ignoring vscode folders and files
+*.code-workspace
+settings.json
+.settings/
+.project
+.classpath
+
+
