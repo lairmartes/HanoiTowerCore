@@ -1,7 +1,7 @@
 # ignoring build folders
 out/
 bin/
-build/
+target/
 
 # ignoring Intellij folders and files
 .idea/
