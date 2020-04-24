@@ -4,7 +4,7 @@
  * Para alterar o gabarito para este arquivo gerado v� para
  * Janela&gt;Prefer�ncias&gt;Java&gt;Gera��o de C�digos&gt;C�digo e Coment�rios
  */
-package com.gmail.lairmartes.game.hanoitower.exception;
+package com.martialdev.game.hanoitower.core.control.exception;
 
 /**
  * @author alunos

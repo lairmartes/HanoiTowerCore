@@ -1,7 +1,7 @@
 /*
  * Criado em 20/08/2005
  */
-package com.gmail.lairmartes.datastructure.stack;
+package com.martialdev.game.hanoitower.core.datastructure.stack;
 
 /** This interface has been designed for stack implementation standardization.
  * @author Lair Martes Junior RA 200105514

@@ -3,13 +3,13 @@
  * Refactored 01/18/2018
  *
  */
-package com.gmail.lairmartes.game.hanoitower;
+package com.martialdev.game.hanoitower.core.control;
 
-import com.gmail.lairmartes.game.hanoitower.event.GameOverEvent;
-import com.gmail.lairmartes.game.hanoitower.event.GameStartEvent;
-import com.gmail.lairmartes.game.hanoitower.event.HanoiTowerListener;
-import com.gmail.lairmartes.game.hanoitower.event.PinEvent;
-import com.gmail.lairmartes.game.hanoitower.exception.InvalidMoveException;
+import com.martialdev.game.hanoitower.core.control.event.GameOverEvent;
+import com.martialdev.game.hanoitower.core.control.event.PinEvent;
+import com.martialdev.game.hanoitower.core.control.event.GameStartEvent;
+import com.martialdev.game.hanoitower.core.control.event.HanoiTowerListener;
+import com.martialdev.game.hanoitower.core.control.exception.InvalidMoveException;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,18 +1,18 @@
-package com.gmail.lairmartes.game.hanoitower;
+package com.martialdev.game.hanoitower.core.control;
 
-import com.gmail.lairmartes.game.hanoitower.event.GameOverEvent;
-import com.gmail.lairmartes.game.hanoitower.event.GameStartEvent;
-import com.gmail.lairmartes.game.hanoitower.event.HanoiTowerListener;
-import com.gmail.lairmartes.game.hanoitower.event.PinEvent;
-import com.gmail.lairmartes.game.hanoitower.exception.InvalidMoveException;
+import com.martialdev.game.hanoitower.core.control.event.PinEvent;
+import com.martialdev.game.hanoitower.core.control.event.GameOverEvent;
+import com.martialdev.game.hanoitower.core.control.event.GameStartEvent;
+import com.martialdev.game.hanoitower.core.control.event.HanoiTowerListener;
+import com.martialdev.game.hanoitower.core.control.exception.InvalidMoveException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.function.Executable;
 
-import static com.gmail.lairmartes.game.hanoitower.HanoiTowerControl.PinPosition.FIRST;
-import static com.gmail.lairmartes.game.hanoitower.HanoiTowerControl.PinPosition.SECOND;
-import static com.gmail.lairmartes.game.hanoitower.HanoiTowerControl.PinPosition.THIRD;
+import static com.martialdev.game.hanoitower.core.control.HanoiTowerControl.PinPosition.FIRST;
+import static com.martialdev.game.hanoitower.core.control.HanoiTowerControl.PinPosition.SECOND;
+import static com.martialdev.game.hanoitower.core.control.HanoiTowerControl.PinPosition.THIRD;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

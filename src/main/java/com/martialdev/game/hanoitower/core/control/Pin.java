@@ -3,9 +3,9 @@
  * Refactored 01/18/2018
  *
  */
-package com.gmail.lairmartes.game.hanoitower;
+package com.martialdev.game.hanoitower.core.control;
 
-import com.gmail.lairmartes.game.hanoitower.exception.InvalidMoveException;
+import com.martialdev.game.hanoitower.core.control.exception.InvalidMoveException;
 
 /** Pin is used to implement Hanoi Tower's rules: a greater disk can't be put above a lesser disk.
  *

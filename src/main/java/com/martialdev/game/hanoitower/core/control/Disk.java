@@ -2,7 +2,7 @@
  * Created in 09/26/2005
  * Refactored in 01/18/2018
  */
-package com.gmail.lairmartes.game.hanoitower;
+package com.martialdev.game.hanoitower.core.control;
 
 /** Disk element is designed to be put in Pin.
  *  The Disk element has a size to be compared with another disks.

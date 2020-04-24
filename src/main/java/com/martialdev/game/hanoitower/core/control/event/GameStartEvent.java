@@ -1,4 +1,4 @@
-package com.gmail.lairmartes.game.hanoitower.event;
+package com.martialdev.game.hanoitower.core.control.event;
 
 public class GameStartEvent {
 
@@ -7,10 +7,6 @@ public class GameStartEvent {
     public GameStartEvent(int pinCapacity) {
         this._definedPinCapacity = pinCapacity;
 
-    }
-
-    public int getPinCapacityDefined() {
-        return this._definedPinCapacity;
     }
 
 }

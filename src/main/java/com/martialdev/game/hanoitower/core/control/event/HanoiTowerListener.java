@@ -1,4 +1,4 @@
-package com.gmail.lairmartes.game.hanoitower.event;
+package com.martialdev.game.hanoitower.core.control.event;
 
 public interface HanoiTowerListener {
 

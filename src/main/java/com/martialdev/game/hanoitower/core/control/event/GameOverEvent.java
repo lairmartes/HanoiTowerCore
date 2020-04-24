@@ -1,4 +1,4 @@
-package com.gmail.lairmartes.game.hanoitower.event;
+package com.martialdev.game.hanoitower.core.control.event;
 
 public class GameOverEvent {
 
@@ -8,10 +8,6 @@ public class GameOverEvent {
     public GameOverEvent(int moves, double score) {
         this._moveQuantity = moves;
         this._score = score;
-    }
-
-    public int getMoveQuantity() {
-        return this._moveQuantity;
     }
 
     public double getScore() {

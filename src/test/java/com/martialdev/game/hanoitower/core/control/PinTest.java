@@ -1,6 +1,6 @@
-package com.gmail.lairmartes.game.hanoitower;
+package com.martialdev.game.hanoitower.core.control;
 
-import com.gmail.lairmartes.game.hanoitower.exception.InvalidMoveException;
+import com.martialdev.game.hanoitower.core.control.exception.InvalidMoveException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

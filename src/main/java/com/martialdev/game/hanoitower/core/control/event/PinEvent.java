@@ -1,8 +1,8 @@
-package com.gmail.lairmartes.game.hanoitower.event;
+package com.martialdev.game.hanoitower.core.control.event;
 
-import com.gmail.lairmartes.game.hanoitower.Disk;
-import com.gmail.lairmartes.game.hanoitower.Pin;
-import static com.gmail.lairmartes.game.hanoitower.HanoiTowerControl.PinPosition;
+import com.martialdev.game.hanoitower.core.control.Disk;
+import com.martialdev.game.hanoitower.core.control.Pin;
+import static com.martialdev.game.hanoitower.core.control.HanoiTowerControl.PinPosition;
 
 public class PinEvent {
 

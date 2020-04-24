@@ -2,9 +2,9 @@
  * Created 08/16/2005
  * Refactored 01/18/2018
  */
-package com.gmail.lairmartes.game.hanoitower;
+package com.martialdev.game.hanoitower.core.control;
 
-import com.gmail.lairmartes.datastructure.stack.GenericStack;
+import com.martialdev.game.hanoitower.core.datastructure.stack.GenericStack;
 
 /** DiskStack is an implementation of GenericStack designed to receive Disk elements.
  *
