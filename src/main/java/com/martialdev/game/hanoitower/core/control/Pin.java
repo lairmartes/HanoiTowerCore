@@ -73,12 +73,4 @@ public class Pin {
     public void reset(int howManyDisks) {
         diskStack.reset(howManyDisks);
     }
-
-    /** Return how many disks are in the pin.  Created for testing purposes.  Do not use, except for tests!!!
-     *
-     * @return how many elements the pin can hold.
-     */
-    protected int getStackSize() {
-        return diskStack.size();
-    }
 }

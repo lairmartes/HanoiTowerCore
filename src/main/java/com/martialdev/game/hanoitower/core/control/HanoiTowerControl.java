@@ -6,9 +6,9 @@
 package com.martialdev.game.hanoitower.core.control;
 
 import com.martialdev.game.hanoitower.core.control.event.GameOverEvent;
-import com.martialdev.game.hanoitower.core.control.event.PinEvent;
 import com.martialdev.game.hanoitower.core.control.event.GameStartEvent;
 import com.martialdev.game.hanoitower.core.control.event.HanoiTowerListener;
+import com.martialdev.game.hanoitower.core.control.event.PinEvent;
 import com.martialdev.game.hanoitower.core.control.exception.InvalidMoveException;
 
 import java.util.ArrayList;
@@ -141,15 +141,6 @@ public class HanoiTowerControl {
         if (isGameOver()) {
             broadCastEvent(new GameOverEvent(this._movesDone, this._score));
         }
-    }
-
-    /** Returns the capacity of the game.  Created for testing purposes.  Do not use, except for tests!!!
-     *
-     * @param aPin pin position.
-     * @return how many disks are available in the game.
-     */
-    protected int currentStackSize(PinPosition aPin) {
-        return _gamePins[aPin.ordinal()].getStackSize();
     }
 
     // test if the game is over
