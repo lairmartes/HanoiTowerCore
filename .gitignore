@@ -1,6 +1,4 @@
 # ignoring build folders
-out/
-bin/
 target/
 
 # ignoring Intellij folders and files
@@ -17,16 +15,4 @@ settings.json
 .project
 .classpath
 
-# ignoring gradle files (except gradle build and settings that describe how to build this component)
-.gradle/
-gradle/
-# ignoring gradle shell script/windows batch files
-gradlew 
-gradlew.bat
 
-
-# Ignore Gradle project-specific cache directory
-.gradle
-
-# Ignore Gradle build output directory
-build
