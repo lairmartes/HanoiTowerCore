@@ -78,8 +78,7 @@ class PinTest {
             Assertions.fail("A disk has been removed from pin correctly, but an illegal movement has been detected");
         }
 
-        Assertions.assertTrue(diskRemoved == diskTest1,
-                "Removed disk should be the last disk included in the pin");
+        Assertions.assertSame(diskRemoved, diskTest1, "Removed disk should be the last disk included in the pin");
     }
 
     @Test
@@ -110,7 +109,7 @@ class PinTest {
         /* testing disks inputed and recovered */ {
             int count = 0;
             for (int i = diskArrayTest.length - 1; i >= 0; i--) {
-                Assertions.assertTrue(diskArrayTest[i] == recoveredDisks[count++]);
+                Assertions.assertSame(diskArrayTest[i], recoveredDisks[count++]);
             }
         }
     }

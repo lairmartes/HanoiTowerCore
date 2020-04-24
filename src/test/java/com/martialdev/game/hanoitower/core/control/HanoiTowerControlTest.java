@@ -141,7 +141,13 @@ class HanoiTowerControlTest {
     }
 
     @Test
-    @DisplayName("Check how many movements have been done")
+    @DisplayName("Receive Game Start event when game is restarted")
+    public void checkIfRestartGameLaunchesNewGameEvent() {
+        _matchTest.startGame(3);
+        _matchTest.restartGame(5);
+        assertEquals(5, _gameStartEvent.capacity);
+    }
+
 
     private void playPerfectGameWithThreeDisks() throws InvalidMoveException {
         _matchTest.startGame(3);
