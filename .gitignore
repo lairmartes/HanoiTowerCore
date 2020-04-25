@@ -15,4 +15,5 @@ settings.json
 .project
 .classpath
 
-
+# ignoring release files
+release.properties
