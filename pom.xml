@@ -87,6 +87,7 @@
                 <configuration>
                     <release>8</release>
                     <includes>
+                        <include>**/*.java</include>
                         <include>**/*Test.java</include>
                     </includes>
                 </configuration>
