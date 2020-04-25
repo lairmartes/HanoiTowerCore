@@ -12,6 +12,7 @@ import com.martialdev.game.hanoitower.core.control.event.PinEvent;
 import com.martialdev.game.hanoitower.core.control.exception.InvalidMoveException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /** Hanoi Tower Control manages a Hanoi Tower Game.
@@ -145,18 +146,13 @@ public class HanoiTowerControl {
 
     // test if the game is over
     private boolean isGameOver() {
-
-        for (Disk d : _gamePins[PinPosition.FIRST.ordinal()].getDisks()) {
-            if (!Disk.DISK_ZERO.equals(d)) {
-                return false;
-            }
+        if (Arrays.stream(_gamePins[PinPosition.FIRST.ordinal()].getDisks())
+                .anyMatch(disk -> !Disk.DISK_ZERO.equals(disk))) {
+            return false; 
         }
 
-        for (Disk d : _gamePins[PinPosition.THIRD.ordinal()].getDisks()) {
-            if (Disk.DISK_ZERO.equals(d)) return false;
-        }
-
-        return true;
+        return Arrays.stream(_gamePins[PinPosition.THIRD.ordinal()].getDisks())
+                .noneMatch(Disk.DISK_ZERO::equals);
     }
 
     /** Include an event listener that will receive Hanoi Tower game notifications.
@@ -169,30 +165,18 @@ public class HanoiTowerControl {
 
     // event broadcaster
     private void fireDiskAdded(PinEvent event) {
-
-        for (HanoiTowerListener listener : _hanoiTowerListener) {
-            listener.fireDiskAdded(event);
-        }
+        _hanoiTowerListener.forEach(listener -> listener.fireDiskAdded(event));
     }
 
     private void broadCastEvent(GameOverEvent event) {
-
-        for (HanoiTowerListener listener : _hanoiTowerListener) {
-            listener.hanoiTowerEvent(event);
-        }
+        _hanoiTowerListener.forEach(listener -> listener.hanoiTowerEvent(event));
     }
 
     private void fireDiskRemoved(PinEvent event) {
-
-        for (HanoiTowerListener listener : _hanoiTowerListener) {
-            listener.fireDiskRemoved(event);
-        }
+        _hanoiTowerListener.forEach(listener -> listener.fireDiskRemoved(event));
     }
 
     private void broadCastEvent(GameStartEvent event) {
-
-        for (HanoiTowerListener listener : _hanoiTowerListener) {
-            listener.hanoiTowerEvent(event);
-        }
+        _hanoiTowerListener.forEach(listener -> listener.hanoiTowerEvent(event));
     }
 }
