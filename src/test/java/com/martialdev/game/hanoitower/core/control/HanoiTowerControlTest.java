@@ -99,14 +99,14 @@ class HanoiTowerControlTest {
     }
 
     @Test
-    @DisplayName("Check pin event source and destiny")
+    @DisplayName("Check if it notifies disk moves correctly")
     public void verifyIfRemovedAndAddedDisksAreEquals() {
         try {
             _matchTest.startGame(3);
             _matchTest.grabDisk(FIRST_PIN);
             _matchTest.dropDisk(SECOND_PIN);
-            PinEvent removedExpected = new PinEvent(new Disk(1), FIRST_PIN, new Pin(3), 0);
-            PinEvent addedExpected = new PinEvent(new Disk(1), SECOND_PIN, new Pin(3), 1);
+            final PinEvent removedExpected = new PinEvent(new Disk(1), FIRST_PIN, new Pin(3), 0);
+            final PinEvent addedExpected = new PinEvent(new Disk(1), SECOND_PIN, new Pin(3), 1);
             assertTrue(comparePinEvents(_pinEventRemoved, removedExpected));
             assertTrue(comparePinEvents(_pinEventAdded, addedExpected));
         } catch (InvalidMoveException e) {
@@ -129,7 +129,7 @@ class HanoiTowerControlTest {
     @DisplayName("Check if controller detects an invalid move")
     void makeInvalidMoveAndCheckIfItIsInvalid() {
 
-        HanoiTowerControl _matchTest = new HanoiTowerControl();
+        final HanoiTowerControl _matchTest = new HanoiTowerControl();
         _matchTest.startGame(5);
 
         try {
@@ -156,7 +156,7 @@ class HanoiTowerControlTest {
     @DisplayName("Launch event when disk is grabbed")
     public void checkIfEventIsLaunchedWhenDiskIsGrabbed() {
         _matchTest.startGame(3);
-        PinEvent removedExpected = new PinEvent(new Disk(1), FIRST_PIN, new Pin(3), 0);
+        final PinEvent removedExpected = new PinEvent(new Disk(1), FIRST_PIN, new Pin(3), 0);
         try {
             _matchTest.grabDisk(FIRST_PIN);
             assertTrue(comparePinEvents(removedExpected, _pinEventRemoved));
@@ -169,7 +169,7 @@ class HanoiTowerControlTest {
     @DisplayName("Launch event when disk is dropped")
     public void checkIfEventIsLaunchedWhenDiskIsDropped() {
         _matchTest.startGame(3);
-        PinEvent addedExpected = new PinEvent(new Disk(1), SECOND_PIN, new Pin(3), 1);
+        final PinEvent addedExpected = new PinEvent(new Disk(1), SECOND_PIN, new Pin(3), 1);
         try {
             _matchTest.grabDisk(FIRST_PIN);
             _matchTest.dropDisk(SECOND_PIN);
@@ -201,6 +201,30 @@ class HanoiTowerControlTest {
         }
     }
 
+    @Test
+    @DisplayName("Do not allow drop disk when disk is not grabbed")
+    public void checkIfDoesNotAllowDropDiskWhenNotGrabbed() {
+        _matchTest.startGame(3);
+        try {
+            _matchTest.grabDisk(FIRST_PIN);
+            _matchTest.dropDisk(SECOND_PIN);
+            assertThrows(InvalidMoveException.class, () -> _matchTest.dropDisk(THIRD_PIN));
+        } catch (InvalidMoveException e) {
+            fail("Unexpected exception: " + e);
+        }
+    }
+
+    @Test
+    @DisplayName("Do not allow grab a disk when a disk has grabbed already")
+    public void checkIfDoesNotAllowDropDiskWhenAnotherIsGrabbed() {
+        try {
+            _matchTest.startGame(3);
+            _matchTest.grabDisk(FIRST_PIN);
+            assertThrows(InvalidMoveException.class, () ->_matchTest.grabDisk(FIRST_PIN));
+        } catch (InvalidMoveException e) {
+            fail("Unexpected exception: " + e);
+        }
+    }
 
     private void playPerfectGameWithThreeDisks() throws InvalidMoveException {
         _matchTest.startGame(3);

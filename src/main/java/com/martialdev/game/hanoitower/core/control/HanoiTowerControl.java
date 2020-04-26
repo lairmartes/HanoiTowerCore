@@ -115,6 +115,10 @@ public class HanoiTowerControl {
             throw new InvalidMoveException("Game is over. No more moves allowed.");
         }
 
+        if (!Disk.DISK_ZERO.equals(_currentDisk)) {
+            throw new InvalidMoveException("Only one disk can be grabbed per move");
+        }
+
         Pin pinSelected = _gamePins[pinPosition.ordinal()];
         _currentDisk = pinSelected.removeDisk();
 
@@ -128,7 +132,11 @@ public class HanoiTowerControl {
      */
     public void dropDisk(PinPosition pinPosition) throws InvalidMoveException {
         if (isGameOver()) {
-            throw new InvalidMoveException("Game is over.  No more moves are allowed");
+            throw new InvalidMoveException("Game is over.  No more moves are allowed.");
+        }
+
+        if (Disk.DISK_ZERO.equals(_currentDisk)) {
+            throw new InvalidMoveException("No disk to be dropped has been selected.");
         }
 
         Pin pinSelected = _gamePins[pinPosition.ordinal()];
@@ -141,6 +149,8 @@ public class HanoiTowerControl {
         }
 
         fireDiskAdded(new PinEvent(_currentDisk, pinPosition, pinSelected, this._movesDone));
+
+        _currentDisk = Disk.DISK_ZERO;
 
         if (isGameOver()) {
             broadCastEvent(new GameOverEvent(this._movesDone, this._score));
