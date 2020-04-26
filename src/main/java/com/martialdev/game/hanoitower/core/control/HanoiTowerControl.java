@@ -34,7 +34,7 @@ public class HanoiTowerControl {
     /** Enumeration of pins indicating it's position.
      */
     public enum PinPosition {
-        FIRST, SECOND, THIRD
+        FIRST_PIN, SECOND_PIN, THIRD_PIN
     }
 
     /** Constructs a Hanoi Tower game manager with no capacity.
@@ -92,7 +92,7 @@ public class HanoiTowerControl {
         // include all disks in the first pin
         try {
             for (int i = this._pinCapacity - 1; i >= 0; i--)
-                _gamePins[PinPosition.FIRST.ordinal()].add(_disksInTheGame[i]);
+                _gamePins[PinPosition.FIRST_PIN.ordinal()].add(_disksInTheGame[i]);
         } catch (InvalidMoveException e) {
             throw new RuntimeException("No exception were expected here.  Something goes wrong and requires immediate action.");
         }
@@ -110,7 +110,11 @@ public class HanoiTowerControl {
      *
      * @param pinPosition FIRST, SECOND or THIRD.
      */
-    private void selectFromPin(PinPosition pinPosition) throws InvalidMoveException {
+    public void grabDisk(PinPosition pinPosition) throws InvalidMoveException {
+        if (isGameOver()) {
+            throw new InvalidMoveException("Game is over. No more moves allowed.");
+        }
+
         Pin pinSelected = _gamePins[pinPosition.ordinal()];
         _currentDisk = pinSelected.removeDisk();
 
@@ -122,7 +126,11 @@ public class HanoiTowerControl {
      *
      * @param pinPosition FIRST, SECOND or THIRD.
      */
-    private void moveSelectedToPin(PinPosition pinPosition) throws InvalidMoveException {
+    public void dropDisk(PinPosition pinPosition) throws InvalidMoveException {
+        if (isGameOver()) {
+            throw new InvalidMoveException("Game is over.  No more moves are allowed");
+        }
+
         Pin pinSelected = _gamePins[pinPosition.ordinal()];
         pinSelected.add(_currentDisk);
         _movesDone++;
@@ -139,19 +147,14 @@ public class HanoiTowerControl {
         }
     }
 
-    public void move(final PinPosition from, final PinPosition to) throws InvalidMoveException {
-        selectFromPin(from);
-        moveSelectedToPin(to);
-    }
-
     // test if the game is over
     private boolean isGameOver() {
-        if (Arrays.stream(_gamePins[PinPosition.FIRST.ordinal()].getDisks())
+        if (Arrays.stream(_gamePins[PinPosition.FIRST_PIN.ordinal()].getDisks())
                 .anyMatch(disk -> !Disk.DISK_ZERO.equals(disk))) {
             return false; 
         }
 
-        return Arrays.stream(_gamePins[PinPosition.THIRD.ordinal()].getDisks())
+        return Arrays.stream(_gamePins[PinPosition.THIRD_PIN.ordinal()].getDisks())
                 .noneMatch(Disk.DISK_ZERO::equals);
     }
 
