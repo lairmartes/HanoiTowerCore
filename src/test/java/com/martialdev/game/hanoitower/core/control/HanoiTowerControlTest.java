@@ -9,9 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.martialdev.game.hanoitower.core.control.HanoiTowerControl.PinPosition.FIRST;
-import static com.martialdev.game.hanoitower.core.control.HanoiTowerControl.PinPosition.SECOND;
-import static com.martialdev.game.hanoitower.core.control.HanoiTowerControl.PinPosition.THIRD;
+import static com.martialdev.game.hanoitower.core.control.HanoiTowerControl.PinPosition;
+import static com.martialdev.game.hanoitower.core.control.HanoiTowerControl.PinPosition.FIRST_PIN;
+import static com.martialdev.game.hanoitower.core.control.HanoiTowerControl.PinPosition.SECOND_PIN;
+import static com.martialdev.game.hanoitower.core.control.HanoiTowerControl.PinPosition.THIRD_PIN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -98,13 +99,14 @@ class HanoiTowerControlTest {
     }
 
     @Test
-    @DisplayName("Check pin event source and destiny")
+    @DisplayName("Check if it notifies disk moves correctly")
     public void verifyIfRemovedAndAddedDisksAreEquals() {
         try {
             _matchTest.startGame(3);
-            _matchTest.move(FIRST, SECOND);
-            PinEvent removedExpected = new PinEvent(new Disk(1), FIRST, new Pin(3), 0);
-            PinEvent addedExpected = new PinEvent(new Disk(1), SECOND, new Pin(3), 1);
+            _matchTest.grabDisk(FIRST_PIN);
+            _matchTest.dropDisk(SECOND_PIN);
+            final PinEvent removedExpected = new PinEvent(new Disk(1), FIRST_PIN, new Pin(3), 0);
+            final PinEvent addedExpected = new PinEvent(new Disk(1), SECOND_PIN, new Pin(3), 1);
             assertTrue(comparePinEvents(_pinEventRemoved, removedExpected));
             assertTrue(comparePinEvents(_pinEventAdded, addedExpected));
         } catch (InvalidMoveException e) {
@@ -127,13 +129,15 @@ class HanoiTowerControlTest {
     @DisplayName("Check if controller detects an invalid move")
     void makeInvalidMoveAndCheckIfItIsInvalid() {
 
-        HanoiTowerControl _matchTest = new HanoiTowerControl();
+        final HanoiTowerControl _matchTest = new HanoiTowerControl();
         _matchTest.startGame(5);
 
         try {
-            _matchTest.move(FIRST, SECOND);
+            _matchTest.grabDisk(FIRST_PIN);
+            _matchTest.dropDisk(SECOND_PIN);
 
-            assertThrows(InvalidMoveException.class, () -> _matchTest.move(FIRST, SECOND),
+            _matchTest.grabDisk(FIRST_PIN);
+            assertThrows(InvalidMoveException.class, () -> _matchTest.dropDisk(SECOND_PIN),
                     "An exception should be thrown when trying to put a greater disk above a lesser.");
         } catch (InvalidMoveException e) {
             fail("A invalid move has been detected incorrectly: " + e.getMessage());
@@ -148,31 +152,109 @@ class HanoiTowerControlTest {
         assertEquals(5, _gameStartEvent.capacity);
     }
 
+    @Test
+    @DisplayName("Launch event when disk is grabbed")
+    public void checkIfEventIsLaunchedWhenDiskIsGrabbed() {
+        _matchTest.startGame(3);
+        final PinEvent removedExpected = new PinEvent(new Disk(1), FIRST_PIN, new Pin(3), 0);
+        try {
+            _matchTest.grabDisk(FIRST_PIN);
+            assertTrue(comparePinEvents(removedExpected, _pinEventRemoved));
+        } catch (InvalidMoveException e) {
+            fail("Unexpected exception: " + e);
+        }
+    }
+
+    @Test
+    @DisplayName("Launch event when disk is dropped")
+    public void checkIfEventIsLaunchedWhenDiskIsDropped() {
+        _matchTest.startGame(3);
+        final PinEvent addedExpected = new PinEvent(new Disk(1), SECOND_PIN, new Pin(3), 1);
+        try {
+            _matchTest.grabDisk(FIRST_PIN);
+            _matchTest.dropDisk(SECOND_PIN);
+            assertTrue(comparePinEvents(addedExpected, _pinEventAdded));
+        } catch (InvalidMoveException e) {
+            fail("Unexpected exception: " + e);
+        }
+    }
+
+    @Test
+    @DisplayName("Do not allow to grab a disk after end game")
+    public void checkIfDoesNotAllowGrabDiskAfterGameEnds() {
+        try {
+            playPerfectGameWithThreeDisks();
+            assertThrows(InvalidMoveException.class, () -> _matchTest.grabDisk(THIRD_PIN));
+        } catch (InvalidMoveException e) {
+            fail("Unexpected exception: " + e);
+        }
+    }
+
+    @Test
+    @DisplayName("Do not allow to drop a disk after end game")
+    public void checkIfDoesNotAllowDropDiskAfterGameEnds() {
+        try {
+            playPerfectGameWithThreeDisks();
+            assertThrows(InvalidMoveException.class, () -> _matchTest.dropDisk(SECOND_PIN));
+        } catch (InvalidMoveException e) {
+            fail("Unexpected exception: " + e);
+        }
+    }
+
+    @Test
+    @DisplayName("Do not allow drop disk when disk is not grabbed")
+    public void checkIfDoesNotAllowDropDiskWhenNotGrabbed() {
+        _matchTest.startGame(3);
+        try {
+            _matchTest.grabDisk(FIRST_PIN);
+            _matchTest.dropDisk(SECOND_PIN);
+            assertThrows(InvalidMoveException.class, () -> _matchTest.dropDisk(THIRD_PIN));
+        } catch (InvalidMoveException e) {
+            fail("Unexpected exception: " + e);
+        }
+    }
+
+    @Test
+    @DisplayName("Do not allow grab a disk when a disk has grabbed already")
+    public void checkIfDoesNotAllowDropDiskWhenAnotherIsGrabbed() {
+        try {
+            _matchTest.startGame(3);
+            _matchTest.grabDisk(FIRST_PIN);
+            assertThrows(InvalidMoveException.class, () ->_matchTest.grabDisk(FIRST_PIN));
+        } catch (InvalidMoveException e) {
+            fail("Unexpected exception: " + e);
+        }
+    }
 
     private void playPerfectGameWithThreeDisks() throws InvalidMoveException {
         _matchTest.startGame(3);
-        _matchTest.move(FIRST, THIRD);
-        _matchTest.move(FIRST, SECOND);
-        _matchTest.move(THIRD, SECOND);
-        _matchTest.move(FIRST, THIRD);
-        _matchTest.move(SECOND, FIRST);
-        _matchTest.move(SECOND, THIRD);
-        _matchTest.move(FIRST, THIRD);
+        move(FIRST_PIN, THIRD_PIN);
+        move(FIRST_PIN, SECOND_PIN);
+        move(THIRD_PIN, SECOND_PIN);
+        move(FIRST_PIN, THIRD_PIN);
+        move(SECOND_PIN, FIRST_PIN);
+        move(SECOND_PIN, THIRD_PIN);
+        move(FIRST_PIN, THIRD_PIN);
     }
 
     private void playNotPerfectGameWithThreeDisks() throws InvalidMoveException {
         _matchTest.startGame(3);
-        _matchTest.move(FIRST, SECOND);
-        _matchTest.move(FIRST, THIRD);
-        _matchTest.move(SECOND, THIRD);
-        _matchTest.move(FIRST, SECOND);
-        _matchTest.move(THIRD, SECOND);
-        _matchTest.move(THIRD, FIRST);
-        _matchTest.move(SECOND, FIRST);
-        _matchTest.move(SECOND, THIRD);
-        _matchTest.move(FIRST, SECOND);
-        _matchTest.move(FIRST, THIRD);
-        _matchTest.move(SECOND, THIRD);
+        move(FIRST_PIN, SECOND_PIN);
+        move(FIRST_PIN, THIRD_PIN);
+        move(SECOND_PIN, THIRD_PIN);
+        move(FIRST_PIN, SECOND_PIN);
+        move(THIRD_PIN, SECOND_PIN);
+        move(THIRD_PIN, FIRST_PIN);
+        move(SECOND_PIN, FIRST_PIN);
+        move(SECOND_PIN, THIRD_PIN);
+        move(FIRST_PIN, SECOND_PIN);
+        move(FIRST_PIN, THIRD_PIN);
+        move(SECOND_PIN, THIRD_PIN);
+    }
+
+    private void move(PinPosition pin1, PinPosition pin2) throws InvalidMoveException{
+        _matchTest.grabDisk(pin1);
+        _matchTest.dropDisk(pin2);
     }
 
     private boolean comparePinEvents(PinEvent pinEvent1, PinEvent pinEvent2) {
