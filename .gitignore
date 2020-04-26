@@ -17,3 +17,5 @@ settings.json
 
 # ignoring release files
 release.properties
+pom.xml.releaseBackup
+
