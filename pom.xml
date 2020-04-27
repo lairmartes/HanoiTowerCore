@@ -12,6 +12,8 @@
         Components to be used in Hanoi Tower games. Developers can use it to build the application.
     </description>
 
+    <url>https://lairmartes.github.io/HanoiTowerCore/</url>
+
     <licenses>
         <license>
             <name>GPL-v3.0</name>
