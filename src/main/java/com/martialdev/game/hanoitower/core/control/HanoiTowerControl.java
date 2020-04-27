@@ -109,6 +109,8 @@ public class HanoiTowerControl {
      * Info: Broadcasts disk removed event.
      *
      * @param pinPosition FIRST, SECOND or THIRD.
+     *
+     * @throws InvalidMoveException - when game is over or a disk is selected
      */
     public void grabDisk(PinPosition pinPosition) throws InvalidMoveException {
         if (isGameOver()) {
@@ -129,6 +131,8 @@ public class HanoiTowerControl {
      * Info: Broadcasts disk added event and game over event (when game is over, of course).
      *
      * @param pinPosition FIRST, SECOND or THIRD.
+     *
+     * @throws InvalidMoveException - when game is over or no disk is selected
      */
     public void dropDisk(PinPosition pinPosition) throws InvalidMoveException {
         if (isGameOver()) {
