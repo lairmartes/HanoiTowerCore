@@ -61,7 +61,7 @@ public class HanoiTowerControl {
     }
 
     /** Indicate how many disks will be moved during the Hanoi Tower game now.
-     * <b>Info</b> -> Broadcasts a GameStartEvent!!!
+     * Info: Broadcasts a GameStartEvent!!!
      *
      * @param pinCapacity how many disks will be moved during the game now.
      */
@@ -106,7 +106,7 @@ public class HanoiTowerControl {
     }
 
     /** Remove a disk from a given pin position.  Returns the removed disk.
-     * <b>Info</b>: Broadcasts disk removed event.
+     * Info: Broadcasts disk removed event.
      *
      * @param pinPosition FIRST, SECOND or THIRD.
      */
@@ -126,7 +126,7 @@ public class HanoiTowerControl {
     }
 
     /** Include the given disk in the pin located in the given pin position.
-     * <b>Info</b>: Broadcasts disk added event and game over event (when game is over, of course).
+     * Info: Broadcasts disk added event and game over event (when game is over, of course).
      *
      * @param pinPosition FIRST, SECOND or THIRD.
      */
