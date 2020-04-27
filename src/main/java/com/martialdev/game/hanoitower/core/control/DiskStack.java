@@ -72,9 +72,9 @@ public class DiskStack implements GenericStack<Disk, Disk> {
 
 	/** Return the last disk included in the stack.
 	 *
-	 * @override GenericStack.top
 	 * @return the last disk included in the stack.
 	 */
+	@Override
 	public Disk top() {
 		return _stack[iPos - 1];
 	}

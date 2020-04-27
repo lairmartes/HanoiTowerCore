@@ -22,7 +22,7 @@ public class Disk implements Comparable<Disk>{
 	/**
 	 * A Disk element must be constructed with a size.
 	 *
-	 * @param size
+	 * @param size - size of the disk
 	 */
 	public Disk(int size) {
 		_size = size;
@@ -44,31 +44,34 @@ public class Disk implements Comparable<Disk>{
 	 * 	- if the current element has size 3 and compared element has size 11, the result is -8 (negative).
 	 *  <b>Warning: </b> if the compared object isn't an instance of Disk, the result is 0.
 	 *
-	 *  @override Comparable.compareTo
-	 *
 	 * @param aDisk a Disk to be compared with the current disk.
 	 * @return the value obtained from the operation of this element size minus the compared element size.
 	 */
+	@Override
 	public int compareTo(Disk aDisk) {
 		return _size - aDisk.getSize();
 	}
 
 	/** Returns a string containing the size of this Disk.
 	 *
-	 * @override Object.toString
 	 * @return a string with the size of the disk
 	 */
+	@Override
 	public String toString() {
 		return _toString;
 	}
 
 	/** Returns true if the current disk has the same size of the given disk.
 	 *
-	 * @override Object.equals
 	 * @param aDisk Disk to be compared.
 	 * @return true if the disks have the same size.
 	 */
-	public boolean equals(Disk aDisk) {
-		return aDisk.getSize() == this.getSize();
+	@Override
+	public boolean equals(Object aDisk) {
+		if (aDisk instanceof Disk) {
+			return ((Disk)aDisk).getSize() == this.getSize();
+		} else {
+			return false;
+		}
 	}
 }

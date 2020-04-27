@@ -14,11 +14,11 @@ import com.martialdev.game.hanoitower.core.control.exception.InvalidMoveExceptio
  * @author Lair Martes Junior - 2CCPN - USJT
  */
 public class Pin {
-    private DiskStack diskStack;
+    private final DiskStack diskStack;
 
     /** Initialize a Pin with a capacity.
      *
-     * @param howManyDisks
+     * @param howManyDisks - provide how many disks a pin must have
      */
     public Pin(int howManyDisks) {
 
@@ -29,8 +29,8 @@ public class Pin {
      *  If a disk has size zero, throws an InvalidMoveException.
      *  If the disk on the top of this pin is lesser than the disk to be stacked, throws an InvalidMoveException.
      *
-     * @param diskToBeStacked
-     * @throws InvalidMoveException
+     * @param diskToBeStacked - disk that must be put in the pin
+     * @throws InvalidMoveException - when disk is zero or disk is bigger than last disk added
      */
     public void add(Disk diskToBeStacked) throws InvalidMoveException {
         if (diskToBeStacked.getSize() == 0)
@@ -48,7 +48,7 @@ public class Pin {
     /** Remove a disk from pin.  If the pin has no disks, throws an InvalidMoveException.
      *
      * @return the last disk included in the stack.
-     * @throws InvalidMoveException
+     * @throws InvalidMoveException when pin has no disks
      */
     public Disk removeDisk() throws InvalidMoveException {
         if (diskStack.size() == 0) {
